@@ -20,28 +20,37 @@ public class UserStorage {
         this.userSteward = userSteward;
     }
 
-    public boolean isUser(User user) throws UserStorageDidNotRead {
+    public boolean isUserExist(String login) throws UserStorageDidNotRead {
         if (users == null) {
+            System.err.println("User storage didn't read");
             throw new UserStorageDidNotRead();
         }
 
-        return users.containsKey(user.getLogin());
+        return users.containsKey(login);
     }
 
-    public void addUser(User user) throws UserAlreadyExistException, UserStorageDidNotRead{
-        if (isUser(user)) {
+    public void addUser(User user) throws UserAlreadyExistException, UserStorageDidNotRead {
+        if (isUserExist(user.getLogin())) {
             throw new UserAlreadyExistException();
         }
 
         users.put(user.getLogin(), user);
     }
 
-    public boolean verifyUser(User user) throws UserDoesNotExistException, UserStorageDidNotRead {
-        if (!isUser(user)) {
+    public boolean verifyUser(String login, String password) throws UserStorageDidNotRead {
+        if (!isUserExist(login)) {
+            return false;
+        }
+
+        return users.get(login).getPasswordHashCode() == password.hashCode();
+    }
+
+    public User getUser(String login) throws UserDoesNotExistException, UserStorageDidNotRead {
+        if (!isUserExist(login)) {
             throw new UserDoesNotExistException();
         }
 
-        return users.get(user.getLogin()).getPasswordHashCode() == user.getPasswordHashCode();
+        return users.get(login);
     }
 
     public void readUsers() throws ReadUsersException {

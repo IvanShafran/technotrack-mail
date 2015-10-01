@@ -2,6 +2,7 @@ package ru.mail.track.messenger;
 
 import ru.mail.track.messenger.authorization.userauthorization.AuthorizationService;
 import ru.mail.track.messenger.authorization.userstorage.UserStorage;
+import ru.mail.track.messenger.authorization.userstorage.UserStorageDidNotRead;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.ReadUsersException;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.SaveUsersException;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.UserFileSteward;
@@ -24,20 +25,24 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         AuthorizationService authorization = new AuthorizationService(scanner, userStorage);
-        while (true) {
-            String line = scanner.nextLine();
-            if (line == null) {
-                continue;
-            } else if (line.equals("exit")) {
-                try {
-                    userStorage.saveUsers();
-                } catch (SaveUsersException e) {
-                    System.out.println("error with saving");
+        try {
+            while (true) {
+                String line = scanner.nextLine();
+                if (line == null) {
+                    continue;
+                } else if (line.equals("exit")) {
+                    try {
+                        userStorage.saveUsers();
+                    } catch (SaveUsersException e) {
+                        System.out.println("error with saving");
+                    }
+                    break;
+                } else {
+                    authorization.startAuthorization();
                 }
-                break;
-            } else {
-                authorization.startAuthorization();
             }
+        } catch (UserStorageDidNotRead e) {
+            //!!!
         }
     }
 }

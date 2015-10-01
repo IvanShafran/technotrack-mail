@@ -8,6 +8,7 @@ import ru.mail.track.messenger.authorization.userstorage.UserStorageDidNotRead;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.RegexCheckingStatus;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.UserSteward;
 
+import java.io.Console;
 import java.util.Scanner;
 
 /**
@@ -17,16 +18,12 @@ import java.util.Scanner;
 public class AuthorizationService {
     private UserStorage userStorage;
     private Scanner in;
-    private boolean isLogin = false;
+    private boolean isLogged = false;
     private User authorizedUser;
 
     public AuthorizationService(Scanner in, UserStorage userStorage) {
         this.in = in;
         this.userStorage = userStorage;
-    }
-
-    private void printUsage() {
-        System.out.println("Usage: \nAuthorization: login password\nRegistration: login password --reg");
     }
 
     private boolean handleStringRegexResults(RegexCheckingStatus status, String string_name) {
@@ -54,67 +51,79 @@ public class AuthorizationService {
         }
     }
 
-    private void tryToRegister(String login, String password) {
-        if (!handleStringRegexResults(UserSteward.checkLogin(login), "login")) {
-            //printUsage();
-            return;
-        }
-
-        if (!handleStringRegexResults(UserSteward.checkPassword(password), "password")) {
-            //printUsage();
-            return;
-        }
-
-        try {
-            userStorage.addUser(new User(login, password.hashCode()));
-        } catch (UserAlreadyExistException e) {
-            System.out.println("User has already existed");
-            return;
-        } catch (UserStorageDidNotRead e) {
-            System.out.println("User storage did not read");
-            return;
-        }
-
-        System.out.println("User has successfully registered");
-    }
-
-    private void tryToLogin(User user) {
-        try {
-            if (userStorage.verifyUser(user)) {
-                isLogin = true;
-                authorizedUser = user;
-                System.out.println("You are logged!");
-            } else {
-                System.out.println("Wrong password");
-            }
-        } catch (UserDoesNotExistException e) {
-            System.out.println("Wrong login");
-        } catch (UserStorageDidNotRead e) {
-            System.out.println("User storage didn't read");
-        }
-    }
-
-    public void startAuthorization() {
-        printUsage();
-
-        String line = in.nextLine();
-        if (line == null) {
-            return;
-        }
-
-        String[] words = line.trim().split("\\s+");
-
-        if (words.length == 2) {
-            tryToLogin(new User(words[0], words[1].hashCode()));
-        } else if (words.length == 3 && words[2].equals("--reg")) {
-            tryToRegister(words[0], words[1]);
+    private String readPassword() {
+        Console console = System.console();
+        if (console == null) {
+            return in.nextLine();
         } else {
-            printUsage();
+            return new String(console.readPassword());
         }
     }
 
-    public boolean isLogin() {
-        return isLogin;
+    public void tryToRegister(String login) throws UserStorageDidNotRead {
+        System.out.print("Would you like to register? (y/n): ");
+
+        String answer = in.nextLine();
+        if (answer != null) {
+            if (answer.equals("y")) {
+                if (!handleStringRegexResults(UserSteward.checkLogin(login), "login")) {
+                    return;
+                }
+
+                System.out.print("Password:");
+                String password = readPassword();
+                if (password != null) {
+                    if (!handleStringRegexResults(UserSteward.checkPassword(password), "password")) {
+                        return;
+                    }
+
+                    try {
+                        userStorage.addUser(new User(login, password.hashCode()));
+                        System.out.println("You has successfully registered!");
+                    } catch (UserAlreadyExistException e) {
+                        //checked before
+                    }
+                }
+            }
+        }
+    }
+
+    private void tryToLogin(String login) throws UserStorageDidNotRead {
+        System.out.print("Password:");
+        String password = readPassword();
+        if (password != null) {
+            try {
+                if (userStorage.verifyUser(login, password)) {
+                    authorizedUser = userStorage.getUser(login);
+                    isLogged = true;
+
+                    System.out.println("You are logged!");
+                } else {
+                    System.out.println("Wrong password or login");
+                }
+            } catch (UserDoesNotExistException e) {
+                //checked before
+            }
+        }
+    }
+
+    public void startAuthorization() throws UserStorageDidNotRead{
+        System.out.print("Login:");
+
+        String login = in.nextLine();
+        if (login == null) {
+            return;
+        }
+
+        if (userStorage.isUserExist(login)) {
+            tryToLogin(login);
+        } else {
+            tryToRegister(login);
+        }
+    }
+
+    public boolean isLogged() {
+        return isLogged;
     }
 
     public User getAuthorizedUser() {
