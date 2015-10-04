@@ -1,12 +1,9 @@
 package ru.mail.track.messenger.authorization.userauthorization;
 
 import ru.mail.track.messenger.authorization.User;
-import ru.mail.track.messenger.authorization.userstorage.UserAlreadyExistException;
-import ru.mail.track.messenger.authorization.userstorage.UserDoesNotExistException;
 import ru.mail.track.messenger.authorization.userstorage.UserStorage;
-import ru.mail.track.messenger.authorization.userstorage.UserStorageDidNotRead;
 import ru.mail.track.messenger.authorization.userstorage.usersteward.RegexCheckingStatus;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.UserSteward;
+import ru.mail.track.messenger.authorization.userstorage.usersteward.UserManager;
 
 import java.io.Console;
 import java.util.Scanner;
@@ -17,116 +14,82 @@ import java.util.Scanner;
  */
 public class AuthorizationService {
     private UserStorage userStorage;
-    private Scanner in;
-    private boolean isLogged = false;
-    private User authorizedUser;
+    private Scanner scanner;
 
-    public AuthorizationService(Scanner in, UserStorage userStorage) {
-        this.in = in;
+    public AuthorizationService(UserStorage userStorage) {
+        this.scanner = new Scanner(System.in);
         this.userStorage = userStorage;
-    }
-
-    private boolean handleStringRegexResults(RegexCheckingStatus status, String string_name) {
-        switch (status) {
-            case OK:
-                return true;
-            case TOO_SHORT:
-                System.out.println(string_name + " is too short");
-                return false;
-            case TOO_LONG:
-                System.out.println(string_name + " is too long");
-                return false;
-            case UNALLOWED_SYMBOLS:
-                System.out.println(string_name + " contains unallowed symbols");
-
-                if (string_name.equals("login")) {
-                    System.out.println("login regex==" + UserSteward.LOGIN_REGEX);
-                } else if (string_name.equals("password")) {
-                    System.out.println("password regex==" + UserSteward.PASSWORD_REGEX);
-                }
-                return false;
-            default:
-                //????
-                return false;
-        }
     }
 
     private String readPassword() {
         Console console = System.console();
         if (console == null) {
-            return in.nextLine();
+            return scanner.nextLine();
         } else {
             return new String(console.readPassword());
         }
     }
 
-    public void tryToRegister(String login) throws UserStorageDidNotRead {
+    public User tryToRegister(String login) {
         System.out.print("Would you like to register? (y/n): ");
 
-        String answer = in.nextLine();
+        String answer = scanner.nextLine();
         if (answer != null) {
             if (answer.equals("y")) {
-                if (!handleStringRegexResults(UserSteward.checkLogin(login), "login")) {
-                    return;
+                RegexCheckingStatus loginStatus = UserManager.checkLogin(login);
+                if (loginStatus != RegexCheckingStatus.OK) {
+                    System.out.println("Bad login: " + loginStatus);
+                    return null;
                 }
 
-                System.out.print("Password:");
+                System.out.print("Password: ");
                 String password = readPassword();
                 if (password != null) {
-                    if (!handleStringRegexResults(UserSteward.checkPassword(password), "password")) {
-                        return;
+                    RegexCheckingStatus passwordStatus = UserManager.checkPassword(password);
+                    if (passwordStatus != RegexCheckingStatus.OK) {
+                        System.out.println("Bad password " + passwordStatus);
+                        return null;
                     }
 
-                    try {
-                        userStorage.addUser(new User(login, password.hashCode()));
-                        System.out.println("You has successfully registered!");
-                    } catch (UserAlreadyExistException e) {
-                        //checked before
-                    }
+                    userStorage.addUser(new User(login, password.hashCode()));
+                    System.out.println("You has successfully registered!");
+
+                    return userStorage.getUser(login);
                 }
             }
         }
+
+        return null;
     }
 
-    private void tryToLogin(String login) throws UserStorageDidNotRead {
+    private User tryToLogin(String login) {
         System.out.print("Password:");
         String password = readPassword();
         if (password != null) {
-            try {
-                if (userStorage.verifyUser(login, password)) {
-                    authorizedUser = userStorage.getUser(login);
-                    isLogged = true;
-
-                    System.out.println("You are logged!");
-                } else {
-                    System.out.println("Wrong password or login");
-                }
-            } catch (UserDoesNotExistException e) {
-                //checked before
+            if (userStorage.verifyUser(login, password)) {
+                System.out.println("You are logged!");
+                return userStorage.getUser(login);
+            } else {
+                System.out.println("Wrong password or login");
+                return null;
             }
         }
+
+        return null;
     }
 
-    public void startAuthorization() throws UserStorageDidNotRead{
+    public User startAuthorization() {
         System.out.print("Login:");
 
-        String login = in.nextLine();
+        String login = scanner.nextLine();
         if (login == null) {
-            return;
+            return null;
         }
 
         if (userStorage.isUserExist(login)) {
-            tryToLogin(login);
+            return tryToLogin(login);
         } else {
-            tryToRegister(login);
+            return tryToRegister(login);
         }
-    }
-
-    public boolean isLogged() {
-        return isLogged;
-    }
-
-    public User getAuthorizedUser() {
-        return authorizedUser;
     }
 }

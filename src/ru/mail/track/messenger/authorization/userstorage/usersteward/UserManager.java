@@ -1,17 +1,13 @@
 package ru.mail.track.messenger.authorization.userstorage.usersteward;
 
-import ru.mail.track.messenger.authorization.User;
-
-import java.util.HashMap;
-
 /**
  * Created by Ivan Shafran on 28.09.2015.
  * Mail: vanobox07@mail.ru
  */
 
-public interface UserSteward {
-    HashMap<String, User> readUsers() throws ReadUsersException;
-    void saveUsers(HashMap<String, User> users) throws SaveUsersException;
+public interface UserManager {
+    void readUsers();
+    void saveUsers();
 
     String LOGIN_REGEX = "^[a-z0-9_-]{6,20}$";
     int LOGIN_MIN_LENGTH = 6;

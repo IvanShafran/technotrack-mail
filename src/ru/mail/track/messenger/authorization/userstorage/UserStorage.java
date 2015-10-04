@@ -1,9 +1,7 @@
 package ru.mail.track.messenger.authorization.userstorage;
 
 import ru.mail.track.messenger.authorization.User;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.ReadUsersException;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.SaveUsersException;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.UserSteward;
+import ru.mail.track.messenger.authorization.userstorage.usersteward.UserManager;
 
 import java.util.HashMap;
 
@@ -11,53 +9,37 @@ import java.util.HashMap;
  * Created by Ivan Shafran on 28.09.2015.
  * Mail: vanobox07@mail.ru
  */
-public class UserStorage {
+abstract public class UserStorage implements UserManager {
     //login -> user
-    private HashMap<String, User> users;
-    private UserSteward userSteward;
+    protected HashMap<String, User> users;
 
-    public UserStorage(UserSteward userSteward) {
-        this.userSteward = userSteward;
-    }
-
-    public boolean isUserExist(String login) throws UserStorageDidNotRead {
+    public Boolean isUserExist(String login) {
         if (users == null) {
             System.err.println("User storage didn't read");
-            throw new UserStorageDidNotRead();
+            return null;
         }
 
         return users.containsKey(login);
     }
 
-    public void addUser(User user) throws UserAlreadyExistException, UserStorageDidNotRead {
+    public void addUser(User user) {
         if (isUserExist(user.getLogin())) {
-            throw new UserAlreadyExistException();
+            System.err.println("User has already registered");
+            return;
         }
 
         users.put(user.getLogin(), user);
     }
 
-    public boolean verifyUser(String login, String password) throws UserStorageDidNotRead {
-        if (!isUserExist(login)) {
-            return false;
-        }
-
-        return users.get(login).getPasswordHashCode() == password.hashCode();
+    public boolean verifyUser(String login, String password) {
+        return isUserExist(login) && users.get(login).getPasswordHashCode() == password.hashCode();
     }
 
-    public User getUser(String login) throws UserDoesNotExistException, UserStorageDidNotRead {
+    public User getUser(String login) {
         if (!isUserExist(login)) {
-            throw new UserDoesNotExistException();
+            return null;
         }
 
         return users.get(login);
-    }
-
-    public void readUsers() throws ReadUsersException {
-        users = userSteward.readUsers();
-    }
-
-    public void saveUsers() throws SaveUsersException {
-        userSteward.saveUsers(users);
     }
 }
