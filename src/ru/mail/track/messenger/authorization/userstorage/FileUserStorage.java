@@ -1,10 +1,14 @@
 package ru.mail.track.messenger.authorization.userstorage;
 
 import ru.mail.track.messenger.authorization.User;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.RegexCheckingStatus;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.UserManager;
+import ru.mail.track.messenger.authorization.UserFieldsChecking;
+import ru.mail.track.messenger.authorization.UserFieldsCheckingStatus;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -26,7 +30,8 @@ public class FileUserStorage extends UserStorage {
     }
 
     @Override
-    public void readUsers() {
+    public void startFileStorageWork() {
+        UserFieldsChecking userFieldsChecking = new UserFieldsChecking();
         HashMap<String, User> users = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
@@ -39,7 +44,7 @@ public class FileUserStorage extends UserStorage {
                     throw new IOException("broken login/password database on path: " + pathToFile);
                 }
 
-                if (UserManager.checkLogin(words[0]) != RegexCheckingStatus.OK) {
+                if (userFieldsChecking.checkLogin(words[0]) != UserFieldsCheckingStatus.OK) {
                     throw new IOException("broken login/password database on path: " + pathToFile);
                 }
 
@@ -59,17 +64,6 @@ public class FileUserStorage extends UserStorage {
         super.users = users;
     }
 
-    @Override
-    public void saveUsers() {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathToFile))) {
-            for (User user : users.values()) {
-                bufferedWriter.write(user.getLogin() + " " + user.getPasswordHashCode() + "\n");
-            }
-        } catch (IOException e) {
-            System.err.println("Error during data writing");
-        }
-    }
-
     private void saveUser(User user) {
         try {
             bufferedWriter.write(user.getLogin() + " " + user.getPasswordHashCode() + "\n");
@@ -82,5 +76,14 @@ public class FileUserStorage extends UserStorage {
     public void addUser(User user) {
         super.addUser(user);
         saveUser(user);
+    }
+
+    @Override
+    public void finishFileStorageWork() {
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            //just relax
+        }
     }
 }

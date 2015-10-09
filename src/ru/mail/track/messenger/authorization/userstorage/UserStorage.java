@@ -1,7 +1,7 @@
 package ru.mail.track.messenger.authorization.userstorage;
 
+import com.sun.istack.internal.Nullable;
 import ru.mail.track.messenger.authorization.User;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.UserManager;
 
 import java.util.HashMap;
 
@@ -9,14 +9,18 @@ import java.util.HashMap;
  * Created by Ivan Shafran on 28.09.2015.
  * Mail: vanobox07@mail.ru
  */
-abstract public class UserStorage implements UserManager {
+abstract public class UserStorage {
     //login -> user
     protected HashMap<String, User> users;
 
-    public Boolean isUserExist(String login) {
+    abstract public void startFileStorageWork();
+    //closing file descriptor for example
+    abstract public void finishFileStorageWork();
+
+    public boolean isUserExist(String login) {
         if (users == null) {
             System.err.println("User storage didn't read");
-            return null;
+            return false;
         }
 
         return users.containsKey(login);
@@ -35,6 +39,7 @@ abstract public class UserStorage implements UserManager {
         return isUserExist(login) && users.get(login).getPasswordHashCode() == password.hashCode();
     }
 
+    @Nullable
     public User getUser(String login) {
         if (!isUserExist(login)) {
             return null;

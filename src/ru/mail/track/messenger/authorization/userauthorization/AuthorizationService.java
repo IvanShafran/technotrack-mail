@@ -1,9 +1,10 @@
 package ru.mail.track.messenger.authorization.userauthorization;
 
+import com.sun.istack.internal.Nullable;
 import ru.mail.track.messenger.authorization.User;
+import ru.mail.track.messenger.authorization.UserFieldsChecking;
 import ru.mail.track.messenger.authorization.userstorage.UserStorage;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.RegexCheckingStatus;
-import ru.mail.track.messenger.authorization.userstorage.usersteward.UserManager;
+import ru.mail.track.messenger.authorization.UserFieldsCheckingStatus;
 
 import java.io.Console;
 import java.util.Scanner;
@@ -21,6 +22,7 @@ public class AuthorizationService {
         this.userStorage = userStorage;
     }
 
+    @Nullable
     private String readPassword() {
         Console console = System.console();
         if (console == null) {
@@ -30,14 +32,17 @@ public class AuthorizationService {
         }
     }
 
+    @Nullable
     public User tryToRegister(String login) {
+        UserFieldsChecking userFieldsChecking = new UserFieldsChecking();
+
         System.out.print("Would you like to register? (y/n): ");
 
         String answer = scanner.nextLine();
         if (answer != null) {
             if (answer.equals("y")) {
-                RegexCheckingStatus loginStatus = UserManager.checkLogin(login);
-                if (loginStatus != RegexCheckingStatus.OK) {
+                UserFieldsCheckingStatus loginStatus = userFieldsChecking.checkLogin(login);
+                if (loginStatus != UserFieldsCheckingStatus.OK) {
                     System.out.println("Bad login: " + loginStatus);
                     return null;
                 }
@@ -45,8 +50,8 @@ public class AuthorizationService {
                 System.out.print("Password: ");
                 String password = readPassword();
                 if (password != null) {
-                    RegexCheckingStatus passwordStatus = UserManager.checkPassword(password);
-                    if (passwordStatus != RegexCheckingStatus.OK) {
+                    UserFieldsCheckingStatus passwordStatus = userFieldsChecking.checkPassword(password);
+                    if (passwordStatus != UserFieldsCheckingStatus.OK) {
                         System.out.println("Bad password " + passwordStatus);
                         return null;
                     }
@@ -62,6 +67,7 @@ public class AuthorizationService {
         return null;
     }
 
+    @Nullable
     private User tryToLogin(String login) {
         System.out.print("Password:");
         String password = readPassword();
@@ -78,6 +84,7 @@ public class AuthorizationService {
         return null;
     }
 
+    @Nullable
     public User startAuthorization() {
         System.out.print("Login:");
 
