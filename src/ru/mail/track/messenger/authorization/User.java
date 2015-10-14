@@ -29,5 +29,4 @@ public class User {
     public void setPasswordHashCode(int passwordHashCode) {
         this.passwordHashCode = passwordHashCode;
     }
-
 }

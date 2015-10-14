@@ -1,6 +1,6 @@
 package ru.mail.track.messenger;
 
-import ru.mail.track.messenger.authorization.userauthorization.AuthorizationService;
+import ru.mail.track.messenger.authorization.AuthorizationService;
 import ru.mail.track.messenger.authorization.userstorage.FileUserStorage;
 import ru.mail.track.messenger.authorization.userstorage.UserStorage;
 

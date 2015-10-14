@@ -1,4 +1,4 @@
-package ru.mail.track.messenger.authorization.userauthorization;
+package ru.mail.track.messenger.authorization;
 
 import com.sun.istack.internal.Nullable;
 import ru.mail.track.messenger.authorization.User;
