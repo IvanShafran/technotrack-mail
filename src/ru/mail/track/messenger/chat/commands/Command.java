@@ -1,4 +1,4 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.chat.commands;
 
 import java.util.ArrayList;
 

@@ -1,21 +1,22 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.chat.commands;
 
-import java.util.ArrayList;
+import ru.mail.track.messenger.chat.ChatClient;
+import ru.mail.track.messenger.chat.Message;
 
 /**
  * Created by Ivan Shafran on 13.10.2015.
  * Mail: vanobox07@mail.ru
  */
 public class CommandFind implements Command {
-    private Chat chat;
+    private ChatClient chatClient;
 
     @Override
     public String getName() {
         return "--find";
     }
 
-    public CommandFind(Chat chat) {
-        this.chat = chat;
+    public CommandFind(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -26,13 +27,13 @@ public class CommandFind implements Command {
 
         String regex = args[1];
 
-        if (chat.getMessages() == null || chat.getFriend() == null) {
+        if (chatClient.getMessages() == null || chatClient.getFriendLogin() == null) {
             return;
         }
 
         System.out.println("_____Find_____");
-        for (String message : chat.getMessages().get(chat.getFriend().getLogin())) {
-            if (message.matches(regex)) {
+        for (Message message : chatClient.getMessages()) {
+            if (message.getText().matches(regex)) {
                 System.out.println(message);
             }
         }

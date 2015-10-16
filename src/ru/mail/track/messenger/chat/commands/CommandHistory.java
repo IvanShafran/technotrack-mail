@@ -1,4 +1,7 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.chat.commands;
+
+import ru.mail.track.messenger.chat.ChatClient;
+import ru.mail.track.messenger.chat.Message;
 
 import java.util.List;
 
@@ -7,10 +10,10 @@ import java.util.List;
  * Mail: vanobox07@mail.ru
  */
 public class CommandHistory implements Command {
-    private Chat chat;
+    private ChatClient chatClient;
 
-    public CommandHistory(Chat chat) {
-        this.chat = chat;
+    public CommandHistory(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -20,17 +23,23 @@ public class CommandHistory implements Command {
 
     @Override
     public void execute(String[] args) {
-        if (args.length > 2 || args.length < 1) {
+        if (args.length > 2 || args.length < 1 || chatClient.getUser() == null) {
             return;
         }
 
-        List<String> messages = chat.getMessages().get(chat.getFriend().getLogin());
+        List<Message> messages = chatClient.getMessages();
+
+
 
         int count;
         if (args.length == 2) {
             count = Integer.parseInt(args[1]);
         } else {
-            count = messages.size();
+            if (messages == null) {
+                count = 0;
+            } else {
+                count = messages.size();
+            }
         }
 
         StringBuilder stringBuilder = new StringBuilder("____History____\n");

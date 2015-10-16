@@ -15,7 +15,7 @@ abstract public class UserStorage {
 
     abstract public void startFileStorageWork();
     //closing file descriptor for example
-    abstract public void finishFileStorageWork();
+    abstract public void close();
 
     public boolean isUserExist(String login) {
         if (users == null) {
@@ -47,4 +47,5 @@ abstract public class UserStorage {
 
         return users.get(login);
     }
+
 }

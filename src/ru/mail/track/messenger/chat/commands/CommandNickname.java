@@ -1,16 +1,16 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.chat.commands;
 
-import java.util.ArrayList;
+import ru.mail.track.messenger.chat.ChatClient;
 
 /**
  * Created by Ivan Shafran on 13.10.2015.
  * Mail: vanobox07@mail.ru
  */
 public class CommandNickname implements Command {
-    private Chat chat;
+    private ChatClient chatClient;
 
-    public CommandNickname(Chat chat) {
-        this.chat = chat;
+    public CommandNickname(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -24,12 +24,12 @@ public class CommandNickname implements Command {
             return;
         }
 
-        chat.setNickname(args[1]);
+        chatClient.setNickname(args[1]);
     }
 
     @Override
     public String getUsage() {
-        return "Usage user: --nickname your_nickname";
+        return "Usage nickname: --nickname your_nickname";
     }
 
 }

@@ -3,21 +3,20 @@ package ru.mail.track.messenger.chat;
 import com.sun.istack.internal.Nullable;
 import ru.mail.track.messenger.authorization.AuthorizationService;
 import ru.mail.track.messenger.authorization.User;
+import ru.mail.track.messenger.chat.commands.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
  * Created by Ivan Shafran on 13.10.2015.
  * Mail: vanobox07@mail.ru
  */
-public class Chat {
+public class ChatClient {
     private User user;
-    private User friend;
+    private String friendLogin;
     //friend login - > messages
-    private Map<String, List<String>> messages;
+    private MessageManager messageManager;
     private Map<String, Command> commands;
     private String nickname;
     private AuthorizationService authorizationService;
@@ -36,19 +35,35 @@ public class Chat {
 
         command = new CommandFind(this);
         commands.put(command.getName(), command);
+
+        command = new CommandLogin(this);
+        commands.put(command.getName(), command);
+
+        command = new CommandLogout(this);
+        commands.put(command.getName(), command);
+
+        command = new CommandFriend(this);
+        commands.put(command.getName(), command);
     }
 
-    public Chat(AuthorizationService service) {
+    public ChatClient(AuthorizationService service, MessageManager messageManager) {
         initializeCommands();
         this.authorizationService = service;
+        this.messageManager = messageManager;
     }
 
-    public void addMessage(String message) {
-        if (user == null) {
-            return;
-        }
+    public void addMessage(String text) {
+        String[] args = text.trim().split("\\s+");
 
-        String[] args = message.trim().split("\\s+");
+        if (commands.containsKey(args[0])) {
+            commands.get(args[0]).execute(args);
+        } else if (user != null) {
+            try {
+                messageManager.addMessage(user.getLogin(), friendLogin, new MessageImpl(new Date(), text));
+            } catch (AddMessageException e) {
+                System.err.println("Message didn't send");
+            }
+        }
     }
 
     public Map<String, Command> getCommands() {
@@ -64,9 +79,8 @@ public class Chat {
         this.nickname = nickname;
     }
 
-    @Nullable
-    public Map<String, List<String>> getMessages() {
-        return messages;
+    public List<Message> getMessages() {
+        return messageManager.getMessages(user.getLogin(), friendLogin);
     }
 
     @Nullable
@@ -76,20 +90,28 @@ public class Chat {
 
     public void setUser(User user) {
         this.user = user;
-        messages = new HashMap<String, List<String>>();
-        nickname = user.getLogin();
+
+        if (user != null) {
+            nickname = user.getLogin();
+            setFriendLogin(user.getLogin());
+        }
     }
 
     @Nullable
-    public User getFriend() {
-        return friend;
+    public String getFriendLogin() {
+        return friendLogin;
     }
 
-    public void setFriend(User friend) {
-        this.friend = friend;
+    public void setFriendLogin(String friendLogin) {
+        this.friendLogin = friendLogin;
     }
 
     public AuthorizationService getAuthorizationService() {
         return authorizationService;
+    }
+
+    public void close() {
+        messageManager.close();
+        authorizationService.close();
     }
 }

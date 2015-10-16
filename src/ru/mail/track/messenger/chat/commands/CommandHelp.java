@@ -1,16 +1,16 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.chat.commands;
 
-import java.util.ArrayList;
+import ru.mail.track.messenger.chat.ChatClient;
 
 /**
  * Created by Ivan Shafran on 13.10.2015.
  * Mail: vanobox07@mail.ru
  */
 public class CommandHelp implements Command {
-    private Chat chat;
+    private ChatClient chatClient;
 
-    public CommandHelp(Chat chat) {
-        this.chat = chat;
+    public CommandHelp(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CommandHelp implements Command {
             return;
         }
 
-        for (Command command : chat.getCommands()) {
+        for (Command command : chatClient.getCommands().values()) {
             System.out.println(command.getUsage());
         }
     }
