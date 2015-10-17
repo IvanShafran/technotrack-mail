@@ -44,6 +44,9 @@ public class ChatClient {
 
         command = new CommandFriend(this);
         commands.put(command.getName(), command);
+
+        command = new CommandExit(this);
+        commands.put(command.getName(), command);
     }
 
     public ChatClient(AuthorizationService service, MessageManager messageManager) {

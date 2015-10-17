@@ -43,12 +43,7 @@ public class Main {
             String line = scanner.nextLine();
 
             if (line != null) {
-                if (line.equals("--exit")) {
-                    chatClient.close();
-                    break;
-                } else {
-                    chatClient.addMessage(line);
-                }
+                chatClient.addMessage(line);
             }
         }
     }

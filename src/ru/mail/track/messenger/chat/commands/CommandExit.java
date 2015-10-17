@@ -21,8 +21,11 @@ public class CommandExit implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length != 1) {
-
+            return;
         }
+
+        chatClient.close();
+        System.exit(0);
     }
 
     @Override

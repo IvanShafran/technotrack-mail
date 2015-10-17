@@ -154,6 +154,7 @@ public class FileMessageManager implements MessageManager {
         messages.get(from).get(to).add(message);
         try {
             bufferedWriterToFile.get(from).get(to).write(message.getDate().getTime() + " " + message.getText() + "\n");
+            bufferedWriterToFile.get(from).get(to).flush();
         } catch (IOException e) {
             throw new AddMessageException("Can't write message to bufferedWriter");
         }
