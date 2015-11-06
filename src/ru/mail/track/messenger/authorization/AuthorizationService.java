@@ -22,6 +22,10 @@ public class AuthorizationService {
         this.userStorage = userStorage;
     }
 
+    public boolean isUserExist(String login) {
+        return userStorage.isUserExist(login);
+    }
+
     @Nullable
     private String readPassword() {
         Console console = System.console();
@@ -98,5 +102,9 @@ public class AuthorizationService {
         } else {
             return tryToRegister(login);
         }
+    }
+
+    public void close() {
+        userStorage.close();
     }
 }

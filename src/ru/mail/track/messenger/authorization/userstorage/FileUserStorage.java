@@ -79,7 +79,7 @@ public class FileUserStorage extends UserStorage {
     }
 
     @Override
-    public void finishFileStorageWork() {
+    public void close() {
         try {
             bufferedWriter.close();
         } catch (IOException e) {
