@@ -1,4 +1,4 @@
-package ru.mail.track.messenger.commands;
+package ru.mail.track.messenger.socket_messenger.commands;
 
 /**
  *

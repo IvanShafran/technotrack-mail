@@ -1,4 +1,4 @@
-package ru.mail.track.messenger.chat;
+package ru.mail.track.messenger.socket_messenger.chat;
 
 import java.util.HashMap;
 import java.util.List;
