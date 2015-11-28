@@ -1,15 +1,15 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.ChatHistoryCommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.MessageStore;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.ChatHistoryMessage;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.ChatHistoryCommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.MessageStore;
+import ru.mail.track.socket_messenger.message.message_impl.ChatHistoryMessage;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +41,15 @@ public class ChatHistoryCommand implements Command {
             return new CommandResult(CommandType.CHAT_HISTORY, CommandResult.Status.PERMISSION_DENIED, null);
         }
 
+        if (!chatStore.getChatById(chatId).getParticipantIds().contains(user.getId())) {
+            return new CommandResult(CommandType.CHAT_HISTORY, CommandResult.Status.FAILED, "Access denied");
+        }
+
         List<Long> messageIds = messageStore.getMessagesFromChat(chatId);
         List<Message> messages = new ArrayList<>();
-        Integer number = Math.max(chatHistoryMessage.getNumber(), messageIds.size());
         if (chatHistoryMessage.getNumber() != null) {
-            for (int i = number - 1; i >= 0; --i) {
+            Integer number = Math.min(chatHistoryMessage.getNumber(), messageIds.size());
+            for (int i = number; i > 0; --i) {
                 messages.add(messageStore.getMessageById(messageIds.get(messageIds.size() - i)));
             }
         } else {

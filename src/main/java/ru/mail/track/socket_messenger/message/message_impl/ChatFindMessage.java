@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.message.message_impl;
+package ru.mail.track.socket_messenger.message.message_impl;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 /**
  * Created by Ivan Shafran on 08.11.2015.
@@ -30,5 +30,26 @@ public class ChatFindMessage extends UserMessage {
 
     public void setRegex(String regex) {
         this.regex = regex;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChatFindMessage)) return false;
+        if (!super.equals(o)) return false;
+
+        ChatFindMessage that = (ChatFindMessage) o;
+
+        if (getChatId() != null ? !getChatId().equals(that.getChatId()) : that.getChatId() != null) return false;
+        return !(getRegex() != null ? !getRegex().equals(that.getRegex()) : that.getRegex() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getChatId() != null ? getChatId().hashCode() : 0);
+        result = 31 * result + (getRegex() != null ? getRegex().hashCode() : 0);
+        return result;
     }
 }

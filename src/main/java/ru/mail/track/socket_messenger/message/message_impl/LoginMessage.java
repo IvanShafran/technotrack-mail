@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.message.message_impl;
+package ru.mail.track.socket_messenger.message.message_impl;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 /**
  *
@@ -29,5 +29,26 @@ public class LoginMessage extends UserMessage {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LoginMessage)) return false;
+        if (!super.equals(o)) return false;
+
+        LoginMessage that = (LoginMessage) o;
+
+        if (getLogin() != null ? !getLogin().equals(that.getLogin()) : that.getLogin() != null) return false;
+        return !(getPass() != null ? !getPass().equals(that.getPass()) : that.getPass() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getLogin() != null ? getLogin().hashCode() : 0);
+        result = 31 * result + (getPass() != null ? getPass().hashCode() : 0);
+        return result;
     }
 }

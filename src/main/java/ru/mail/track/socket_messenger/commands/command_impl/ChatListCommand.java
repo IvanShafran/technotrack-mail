@@ -1,13 +1,13 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.ChatListCommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.ChatListCommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
 
 /**
  * Created by Ivan Shafran on 10.11.2015.

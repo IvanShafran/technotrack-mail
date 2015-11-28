@@ -1,4 +1,4 @@
-package main.java.ru.mail.track.socket_messenger.user;
+package ru.mail.track.socket_messenger.user;
 
 /**
  * Created by Ivan Shafran on 04.11.2015.
@@ -9,6 +9,9 @@ public class UserImpl implements User {
     private String login;
     private String nickname;
     private String pass;
+
+    public UserImpl() {
+    }
 
     public UserImpl(String login, String pass) {
         this.login = login;

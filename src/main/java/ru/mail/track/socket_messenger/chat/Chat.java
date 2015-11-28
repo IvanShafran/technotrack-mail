@@ -1,4 +1,4 @@
-package main.java.ru.mail.track.socket_messenger.chat;
+package ru.mail.track.socket_messenger.chat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,22 @@ import java.util.List;
 public class Chat {
 
     private Long id;
+    private Boolean isTwoChat;
     /**
      * Храним список идентификаторов
      */
     private List<Long> messageIds = new ArrayList<>();
     private List<Long> participantIds = new ArrayList<>();
+
+    public Chat(List<Long> participantIds) {
+        this.participantIds = participantIds;
+        this.isTwoChat = false;
+    }
+
+    public Chat(List<Long> participantIds, Boolean isTwoChat) {
+        this.participantIds = participantIds;
+        this.isTwoChat = isTwoChat;
+    }
 
     public Long getId() {
         return id;
@@ -48,4 +59,3 @@ public class Chat {
     }
 
 }
-

@@ -1,8 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_result;
+package ru.mail.track.socket_messenger.commands.command_result;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.message.PrivateUserDecorator;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.user.PrivateUserDecorator;
+import ru.mail.track.socket_messenger.user.User;
 
 /**
  * Created by Ivan Shafran on 09.11.2015.
@@ -28,6 +28,25 @@ public class UserInfoCommandResult extends CommandResult {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserInfoCommandResult)) return false;
+        if (!super.equals(o)) return false;
+
+        UserInfoCommandResult that = (UserInfoCommandResult) o;
+
+        return !(getUser() != null ? !getUser().equals(that.getUser()) : that.getUser() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getUser() != null ? getUser().hashCode() : 0);
+        return result;
     }
 }
 

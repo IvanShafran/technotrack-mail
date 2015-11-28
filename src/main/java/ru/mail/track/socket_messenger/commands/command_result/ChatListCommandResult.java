@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_result;
+package ru.mail.track.socket_messenger.commands.command_result;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 import java.util.List;
 
@@ -22,5 +22,24 @@ public class ChatListCommandResult extends CommandResult {
 
     public void setParticipants(List<Long> participants) {
         this.participants = participants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChatListCommandResult)) return false;
+        if (!super.equals(o)) return false;
+
+        ChatListCommandResult that = (ChatListCommandResult) o;
+
+        return !(getParticipants() != null ? !getParticipants().equals(that.getParticipants()) : that.getParticipants() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getParticipants() != null ? getParticipants().hashCode() : 0);
+        return result;
     }
 }

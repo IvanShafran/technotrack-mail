@@ -1,7 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.user;
+package ru.mail.track.socket_messenger.user;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
@@ -9,6 +10,7 @@ import java.util.Map;
 public class UserStoreStub implements UserStore {
 
     private static Map<Long, User> users = new HashMap<>();
+    private AtomicLong nextId = new AtomicLong(4);
 
     static {
         User u0 = new UserImpl("A", "1");
@@ -31,6 +33,7 @@ public class UserStoreStub implements UserStore {
 
     @Override
     public User addUser(User user) {
+        user.setId(nextId.getAndIncrement());
         return users.put(user.getId(), user);
     }
 
@@ -46,6 +49,6 @@ public class UserStoreStub implements UserStore {
 
     @Override
     public User getUserById(Long id) {
-        return null;
+        return users.get(id);
     }
 }

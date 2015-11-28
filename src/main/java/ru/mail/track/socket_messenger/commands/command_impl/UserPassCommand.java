@@ -1,13 +1,13 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.authorization.AuthorizationService;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.UserPassMessage;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.authorization.AuthorizationService;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.message_impl.UserPassMessage;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
 
 /**
  * Created by Ivan Shafran on 09.11.2015.
@@ -30,8 +30,8 @@ public class UserPassCommand implements Command {
         UserPassMessage userPassMessage = (UserPassMessage) message;
 
         String login = user.getLogin();
-        String oldPass = userPassMessage.getNewPass();
-        String newPass = userPassMessage.getOldPass();
+        String oldPass = userPassMessage.getOldPass();
+        String newPass = userPassMessage.getNewPass();
 
         if (oldPass == null || newPass == null) {
             return new CommandResult(CommandType.USER_PASS, CommandResult.Status.FAILED, "Please, check usage");
@@ -40,7 +40,7 @@ public class UserPassCommand implements Command {
         if (authorizationService.changePassword(login, oldPass, newPass) == AuthorizationService.Status.OK) {
             return new CommandResult(CommandType.USER_PASS, CommandResult.Status.OK, null);
         } else {
-            return new CommandResult(CommandType.USER_PASS, CommandResult.Status.FAILED, "Wrong password or login");
+            return new CommandResult(CommandType.USER_PASS, CommandResult.Status.FAILED, "Wrong password");
         }
     }
 

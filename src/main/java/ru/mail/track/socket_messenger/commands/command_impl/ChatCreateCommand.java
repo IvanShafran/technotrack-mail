@@ -1,15 +1,15 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.ChatCreateCommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.ChatCreateMessage;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
-import main.java.ru.mail.track.socket_messenger.user.UserStore;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.ChatCreateCommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.message_impl.ChatCreateMessage;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.user.UserStore;
 
 import java.util.List;
 
@@ -24,7 +24,9 @@ public class ChatCreateCommand implements Command {
 
     @Override
     public CommandResult execute(Session session, Message message) {
-        if (session.getSessionUser() == null) {
+        User sessionUser = session.getSessionUser();
+
+        if (sessionUser == null) {
             return new CommandResult(CommandType.CHAT_CREATE, CommandResult.Status.NOT_LOGGED, null);
         }
 
@@ -33,6 +35,10 @@ public class ChatCreateCommand implements Command {
 
         if (participants == null || participants.size() == 0) {
             return new CommandResult(CommandType.CHAT_CREATE, CommandResult.Status.FAILED, "Please, check usage");
+        }
+
+        if (!participants.contains(sessionUser.getId())) {
+            participants.add(sessionUser.getId());
         }
 
         for (Long id : participants) {
@@ -44,10 +50,9 @@ public class ChatCreateCommand implements Command {
         }
 
         Long chatId;
-        if (participants.size() == 1) {
-            chatId = chatStore.getTwoChatId(session.getSessionUser().getId(), participants.get(0));
+        if (participants.size() == 2) {
+            chatId = chatStore.getTwoChatId(sessionUser.getId(), participants.get(0));
         } else {
-            participants.add(session.getSessionUser().getId());
             chatId = chatStore.createChat(participants);
         }
 

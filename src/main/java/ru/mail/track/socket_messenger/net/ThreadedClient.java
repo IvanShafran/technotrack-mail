@@ -1,27 +1,28 @@
-package main.java.ru.mail.track.socket_messenger.net;
+package ru.mail.track.socket_messenger.net;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.*;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.MessageFabric;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.CommandResultMessage;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.*;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.MessageFabric;
+import ru.mail.track.socket_messenger.message.message_impl.CommandResultMessage;
+import ru.mail.track.socket_messenger.message.message_impl.SendMessage;
+import ru.mail.track.socket_messenger.serialization.NativeSerializeProtocol;
+import ru.mail.track.socket_messenger.serialization.Protocol;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
-
-/**
- * Клиентская часть
- */
 public class ThreadedClient implements MessageListener {
 
-    //static Logger log = LoggerFactory.getLogger(ThreadedClient.class);
+    static Logger log = LoggerFactory.getLogger(ThreadedClient.class);
 
     public static final int PORT = 19000;
     public static final String HOST = "localhost";
@@ -50,7 +51,7 @@ public class ThreadedClient implements MessageListener {
 
     public void processInput(String line) throws IOException {
         String[] tokens = line.trim().split("\\s+");
-        //log.info("Tokens: {}", Arrays.toString(tokens));
+        log.info("Tokens: {}", Arrays.toString(tokens));
         Message message = MessageFabric.createMessage(tokens);
         if (message != null) {
             handler.send(message);
@@ -75,6 +76,7 @@ public class ThreadedClient implements MessageListener {
             case USER_INFO:
                 User user = ((UserInfoCommandResult)result).getUser();
                 System.out.println(user.getLogin());
+                System.out.println("Id: " + user.getId());
                 break;
             case CHAT_LIST:
                 System.out.println("Chat list:");
@@ -84,10 +86,19 @@ public class ThreadedClient implements MessageListener {
                 System.out.println("Chat id: " + ((ChatCreateCommandResult)result).getChatId());
                 break;
             case CHAT_HISTORY:
-                System.out.println(((ChatHistoryCommandResult)result).getMessages());
+                List<Message> messages = ((ChatHistoryCommandResult)result).getMessages();
+                for (Message msg : messages) {
+                    System.out.println(((SendMessage)msg).getMessage());
+                }
                 break;
             case CHAT_FIND:
-                System.out.println(((ChatFindCommandResult) result).getMessages());
+                messages = ((ChatFindCommandResult) result).getMessages();
+                for (Message msg : messages) {
+                    System.out.println(((SendMessage)msg).getMessage());
+                }
+                break;
+            case USER_CREATE:
+                System.out.println("You have successfully registered");
                 break;
         }
     }
@@ -114,9 +125,18 @@ public class ThreadedClient implements MessageListener {
 
     @Override
     public void onMessage(Session session, Message msg) {
-        System.out.println("Hey");
         if (msg.getType() == CommandType.COMMAND_RESULT) {
-            processResult(session, msg);
+            log.info("Get message result. " + ((CommandResultMessage) msg).getCommandResult().getCommandType());
+            if (msg.getType() == CommandType.COMMAND_RESULT) {
+                processResult(session, msg);
+            }
+        } else if (msg.getType() == CommandType.CHAT_SEND) {
+            SendMessage m = (SendMessage)msg;
+            System.out.println("Chat " +  m.getChatId() +
+                    ", user " + m.getSenderId() +
+                    ", message " + m.getMessage());
+        } else {
+            log.warn("onMessage: accept unexpected object");
         }
     }
 

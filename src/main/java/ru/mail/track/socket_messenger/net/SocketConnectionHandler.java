@@ -1,7 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.net;
+package ru.mail.track.socket_messenger.net;
 
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.serialization.Protocol;
+import ru.mail.track.socket_messenger.session.Session;
 
 import java.io.IOException;
 import java.io.InputStream;

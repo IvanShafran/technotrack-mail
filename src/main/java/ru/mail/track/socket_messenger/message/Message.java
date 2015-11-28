@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.message;
+package ru.mail.track.socket_messenger.message;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 import java.io.Serializable;
 
@@ -30,5 +30,24 @@ public abstract class Message implements Serializable {
 
     public void setMessageId(Long messageId) {
         this.messageId = messageId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Message)) return false;
+
+        Message message = (Message) o;
+
+        if (getType() != message.getType()) return false;
+        return !(getMessageId() != null ? !getMessageId().equals(message.getMessageId()) : message.getMessageId() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getType() != null ? getType().hashCode() : 0;
+        result = 31 * result + (getMessageId() != null ? getMessageId().hashCode() : 0);
+        return result;
     }
 }

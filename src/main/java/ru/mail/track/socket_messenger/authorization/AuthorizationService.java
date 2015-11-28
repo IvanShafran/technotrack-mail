@@ -1,8 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.authorization;
+package ru.mail.track.socket_messenger.authorization;
 
-import main.java.ru.mail.track.socket_messenger.user.User;
-import main.java.ru.mail.track.socket_messenger.user.UserImpl;
-import main.java.ru.mail.track.socket_messenger.user.UserStore;
+import ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.user.UserImpl;
+import ru.mail.track.socket_messenger.user.UserStore;
 
 /**
  * Created by Ivan Shafran on 09.11.2015.
@@ -46,6 +46,14 @@ public class AuthorizationService {
     }
 
     public Status authorizeUser(String login, String pass) {
+        if (!login.matches(loginRegex)) {
+            return Status.BAD_LOGIN;
+        }
+
+        if (!pass.matches(passRegex)) {
+            return Status.BAD_PASSWORD;
+        }
+
         User user = userStore.getUser(login);
 
         if (user == null || !user.getPass().equals(pass)) {
@@ -56,6 +64,14 @@ public class AuthorizationService {
     }
 
     public Status changePassword(String login, String oldPass, String newPass) {
+        if (!oldPass.matches(passRegex)) {
+            return Status.BAD_PASSWORD;
+        }
+
+        if (!newPass.matches(passRegex)) {
+            return Status.BAD_PASSWORD;
+        }
+
         User user = userStore.getUser(login);
 
         if (user == null || !user.getPass().equals(oldPass)) {
@@ -64,5 +80,13 @@ public class AuthorizationService {
             user.setPass(newPass);
             return Status.OK;
         }
+    }
+
+    public static String getLoginRegex() {
+        return loginRegex;
+    }
+
+    public static String getPassRegex() {
+        return passRegex;
     }
 }

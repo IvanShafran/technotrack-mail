@@ -1,18 +1,19 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-import main.java.ru.mail.track.socket_messenger.authorization.AuthorizationService;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.LoginCommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.LoginMessage;
-import main.java.ru.mail.track.socket_messenger.net.SessionManager;
-import main.java.ru.mail.track.socket_messenger.session.Session;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.authorization.AuthorizationService;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.LoginCommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.message_impl.LoginMessage;
+import ru.mail.track.socket_messenger.net.SessionManager;
+import ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.user.UserStore;
 
 /**
  * Выполняем авторизацию по этой команде
@@ -23,10 +24,12 @@ public class LoginCommand implements Command {
 
     private AuthorizationService authorizationService;
     private SessionManager sessionManager;
+    private UserStore userStore;
 
-    public LoginCommand(AuthorizationService authorizationService, SessionManager sessionManager) {
+    public LoginCommand(AuthorizationService authorizationService, SessionManager sessionManager, UserStore userStore) {
         this.authorizationService = authorizationService;
         this.sessionManager = sessionManager;
+        this.userStore = userStore;
     }
 
     @Override
@@ -45,6 +48,7 @@ public class LoginCommand implements Command {
             return new CommandResult(CommandType.USER_LOGIN, CommandResult.Status.FAILED,
                         "wrong login or password");
         } else {
+            user = userStore.getUser(loginMsg.getLogin());
             session.setSessionUser(user);
             sessionManager.registerUser(user.getId(), session.getId());
             //log.info("Success login: {}", user);

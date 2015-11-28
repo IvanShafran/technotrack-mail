@@ -1,12 +1,13 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
+
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.HelpCommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.session.Session;
 
 import java.util.Map;
-
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.session.Session;
 
 /**
  * Вывести помощь
@@ -27,7 +28,8 @@ public class HelpCommand implements Command {
             stringBuilder.append("\n");
         }
 
-        return new CommandResult(CommandType.USER_HELP, CommandResult.Status.OK, stringBuilder.toString());
+        return new HelpCommandResult(CommandResult.Status.OK, null,
+                stringBuilder.toString());
     }
 
     @Override

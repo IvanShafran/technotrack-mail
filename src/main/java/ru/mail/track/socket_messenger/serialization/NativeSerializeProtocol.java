@@ -1,7 +1,7 @@
-package main.java.ru.mail.track.socket_messenger.net;
+package ru.mail.track.socket_messenger.serialization;
 
 import com.sun.istack.internal.Nullable;
-import main.java.ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.Message;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

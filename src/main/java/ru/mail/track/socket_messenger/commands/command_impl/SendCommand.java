@@ -1,15 +1,15 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.chat.Chat;
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.commands.Command;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.MessageStore;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.SendMessage;
-import main.java.ru.mail.track.socket_messenger.net.SessionManager;
-import main.java.ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.chat.Chat;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.commands.Command;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.MessageStore;
+import ru.mail.track.socket_messenger.message.message_impl.SendMessage;
+import ru.mail.track.socket_messenger.net.SessionManager;
+import ru.mail.track.socket_messenger.session.Session;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +55,7 @@ public class SendCommand implements Command {
         try {
             for (Long userId : parts) {
                 Session userSession = sessionManager.getSessionByUser(userId);
-                if (userSession != null) {
+                if (userSession != null && !userId.equals(senderId)) {
                     userSession.getConnectionHandler().send(message);
                 }
             }

@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.message.message_impl;
+package ru.mail.track.socket_messenger.message.message_impl;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 /**
  * Created by Ivan Shafran on 08.11.2015.
@@ -20,5 +20,24 @@ public class NicknameMessage extends UserMessage {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NicknameMessage)) return false;
+        if (!super.equals(o)) return false;
+
+        NicknameMessage that = (NicknameMessage) o;
+
+        return !(getNickname() != null ? !getNickname().equals(that.getNickname()) : that.getNickname() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getNickname() != null ? getNickname().hashCode() : 0);
+        return result;
     }
 }

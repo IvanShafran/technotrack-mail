@@ -1,8 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.message;
+package ru.mail.track.socket_messenger.message;
 
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.SendMessage;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.UserMessage;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.message.message_impl.SendMessage;
+import ru.mail.track.socket_messenger.message.message_impl.UserMessage;
 
 import java.util.Arrays;
 import java.util.HashMap;

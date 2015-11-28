@@ -1,8 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.commands;
+package ru.mail.track.socket_messenger.commands;
 
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.session.Session;
 
 /**
  * Интерфейс для всех команд

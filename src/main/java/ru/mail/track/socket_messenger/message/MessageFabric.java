@@ -1,7 +1,7 @@
-package main.java.ru.mail.track.socket_messenger.message;
+package ru.mail.track.socket_messenger.message;
 
 import com.sun.istack.internal.Nullable;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.*;
+import ru.mail.track.socket_messenger.message.message_impl.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +54,17 @@ public class MessageFabric {
         List<Long> users = new ArrayList<>();
 
         if (tokens.length >= 2) {
-            for (String friendId : tokens[1].split(",")) {
-                try {
-                    users.add(Long.valueOf(friendId));
-                } catch (NumberFormatException e) {
-                    return null;
+            for (int i = 1; i < tokens.length; ++i) {
+                for (String friendId : tokens[i].split(",")) {
+                    try {
+                        users.add(Long.valueOf(friendId));
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
                 }
             }
+        } else {
+            return null;
         }
 
         return new ChatCreateMessage(users);
@@ -147,6 +151,20 @@ public class MessageFabric {
         return new ChatFindMessage(chatId, regex);
     }
 
+    public static Message createUserCreateMessage(String[] tokens) {
+        String login;
+        String pass;
+
+        if (tokens.length < 3) {
+            return null;
+        }
+
+        login = tokens[1];
+        pass = tokens[2];
+
+        return new UserCreateMessage(login, pass);
+    }
+
     @Nullable
     public static Message createMessage(String[] tokens) {
         if (tokens.length == 0) {
@@ -175,6 +193,8 @@ public class MessageFabric {
                 return createChatHistoryMessage(tokens);
             case "/chat_find":
                 return createChatFindMessage(tokens);
+            case "/user_create":
+                return createUserCreateMessage(tokens);
             default:
                 return null;
         }

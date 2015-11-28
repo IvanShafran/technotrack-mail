@@ -1,7 +1,7 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_result;
+package ru.mail.track.socket_messenger.commands.command_result;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.user.User;
 
 /**
  * Created by Ivan Shafran on 08.11.2015.

@@ -1,10 +1,13 @@
-package main.java.ru.mail.track.socket_messenger.chat;
+package ru.mail.track.socket_messenger.chat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ChatStoreStub implements ChatStore {
     static HashMap<Long, Chat> chats = new HashMap<>();
+    private AtomicLong nextId = new AtomicLong(3);
 
     static {
         Chat chat1 = new Chat();
@@ -22,12 +25,24 @@ public class ChatStoreStub implements ChatStore {
 
     @Override
     public Long createChat(List<Long> participants) {
-        return null;
+        Chat chat = new Chat();
+        chat.setId(nextId.getAndIncrement());
+        chat.setParticipantIds(participants);
+        chats.put(chat.getId(), chat);
+
+        return chat.getId();
     }
 
     @Override
     public List<Long> getChatsByUserId(Long userId) {
-        return null;
+        List<Long> list = new ArrayList<>();
+        for (Long chatId : chats.keySet()) {
+            if (chats.get(chatId).getParticipantIds().contains(userId)) {
+                list.add(chatId);
+            }
+        }
+
+        return list;
     }
 
     @Override
@@ -37,6 +52,7 @@ public class ChatStoreStub implements ChatStore {
 
     @Override
     public Long getTwoChatId(Long first_id, Long second_id) {
+
         return null;
     }
 

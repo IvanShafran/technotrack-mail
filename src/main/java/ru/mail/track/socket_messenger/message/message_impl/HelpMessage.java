@@ -1,7 +1,7 @@
-package main.java.ru.mail.track.socket_messenger.message.message_impl;
+package ru.mail.track.socket_messenger.message.message_impl;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.message.Message;
 
 /**
  * Created by Ivan Shafran on 02.11.2015.

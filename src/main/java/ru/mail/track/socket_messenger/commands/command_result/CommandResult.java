@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_result;
+package ru.mail.track.socket_messenger.commands.command_result;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 import java.io.Serializable;
 
@@ -45,5 +45,26 @@ public class CommandResult implements Serializable {
 
     public void setReport(String report) {
         this.report = report;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommandResult)) return false;
+
+        CommandResult that = (CommandResult) o;
+
+        if (getCommandType() != that.getCommandType()) return false;
+        if (getStatus() != that.getStatus()) return false;
+        return !(getReport() != null ? !getReport().equals(that.getReport()) : that.getReport() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCommandType() != null ? getCommandType().hashCode() : 0;
+        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
+        result = 31 * result + (getReport() != null ? getReport().hashCode() : 0);
+        return result;
     }
 }

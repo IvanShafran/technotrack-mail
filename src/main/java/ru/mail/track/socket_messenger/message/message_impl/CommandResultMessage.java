@@ -1,8 +1,8 @@
-package main.java.ru.mail.track.socket_messenger.message.message_impl;
+package ru.mail.track.socket_messenger.message.message_impl;
 
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.message.Message;
 
 /**
  * Created by Ivan Shafran on 01.11.2015.
@@ -11,8 +11,8 @@ import main.java.ru.mail.track.socket_messenger.message.Message;
 public class CommandResultMessage extends Message {
     CommandResult commandResult;
 
-    public CommandResultMessage(CommandType type, CommandResult commandResult) {
-        super(type);
+    public CommandResultMessage(CommandResult commandResult) {
+        super(CommandType.COMMAND_RESULT);
         this.commandResult = commandResult;
     }
 
@@ -22,5 +22,24 @@ public class CommandResultMessage extends Message {
 
     public void setCommandResult(CommandResult commandResult) {
         this.commandResult = commandResult;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommandResultMessage)) return false;
+        if (!super.equals(o)) return false;
+
+        CommandResultMessage that = (CommandResultMessage) o;
+
+        return !(getCommandResult() != null ? !getCommandResult().equals(that.getCommandResult()) : that.getCommandResult() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getCommandResult() != null ? getCommandResult().hashCode() : 0);
+        return result;
     }
 }

@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.net;
+package ru.mail.track.socket_messenger.net;
 
-import main.java.ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.session.Session;
 
 import java.util.HashMap;
 import java.util.Map;

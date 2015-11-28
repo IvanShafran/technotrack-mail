@@ -1,4 +1,4 @@
-package main.java.ru.mail.track.socket_messenger.user;
+package ru.mail.track.socket_messenger.user;
 
 import com.sun.istack.internal.Nullable;
 

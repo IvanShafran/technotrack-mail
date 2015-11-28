@@ -1,7 +1,7 @@
-package main.java.ru.mail.track.socket_messenger.session;
+package ru.mail.track.socket_messenger.session;
 
-import main.java.ru.mail.track.socket_messenger.user.User;
-import main.java.ru.mail.track.socket_messenger.net.ConnectionHandler;
+import ru.mail.track.socket_messenger.user.User;
+import ru.mail.track.socket_messenger.net.ConnectionHandler;
 
 /**
  * Класс содержит информацию о текущей сессии взаимодействия

@@ -1,6 +1,6 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_result;
+package ru.mail.track.socket_messenger.commands.command_result;
 
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.CommandType;
 
 /**
  * Created by Ivan Shafran on 09.11.2015.
@@ -20,5 +20,24 @@ public class ChatCreateCommandResult extends CommandResult {
 
     public void setChatId(Long chatId) {
         this.chatId = chatId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChatCreateCommandResult)) return false;
+        if (!super.equals(o)) return false;
+
+        ChatCreateCommandResult that = (ChatCreateCommandResult) o;
+
+        return !(getChatId() != null ? !getChatId().equals(that.getChatId()) : that.getChatId() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getChatId() != null ? getChatId().hashCode() : 0);
+        return result;
     }
 }

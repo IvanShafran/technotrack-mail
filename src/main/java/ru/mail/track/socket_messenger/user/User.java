@@ -1,9 +1,12 @@
-package main.java.ru.mail.track.socket_messenger.user;
+package ru.mail.track.socket_messenger.user;
 
+
+import ru.mail.track.socket_messenger.jdbc.Dao.Identified;
 
 import java.io.Serializable;
 
-public interface User extends Serializable {
+public interface User extends Serializable, Identified<Long> {
+    @Override
     Long getId();
     void setId(Long id);
     String getPass();

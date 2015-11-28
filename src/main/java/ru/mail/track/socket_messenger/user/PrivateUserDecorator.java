@@ -1,7 +1,4 @@
-package main.java.ru.mail.track.socket_messenger.message;
-
-import main.java.ru.mail.track.socket_messenger.user.User;
-import main.java.ru.mail.track.socket_messenger.user.UserImpl;
+package ru.mail.track.socket_messenger.user;
 
 /**
  * Created by Ivan Shafran on 08.11.2015.
@@ -11,6 +8,7 @@ public class PrivateUserDecorator extends UserImpl {
     public PrivateUserDecorator(User user) {
         super(user.getLogin(), null);
         this.setNickname(user.getNickname());
+        this.setId(user.getId());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package main.java.ru.mail.track.socket_messenger.commands;
+package ru.mail.track.socket_messenger.commands;
 
 /**
  *
@@ -14,5 +14,6 @@ public enum CommandType {
     CHAT_LIST,
     CHAT_CREATE,
     CHAT_HISTORY,
-    CHAT_FIND
+    CHAT_FIND,
+    USER_CREATE
 }

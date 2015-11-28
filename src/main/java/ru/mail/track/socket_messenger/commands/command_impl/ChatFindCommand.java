@@ -1,16 +1,16 @@
-package main.java.ru.mail.track.socket_messenger.commands.command_impl;
+package ru.mail.track.socket_messenger.commands.command_impl;
 
-import main.java.ru.mail.track.socket_messenger.chat.ChatStore;
-import main.java.ru.mail.track.socket_messenger.commands.CommandType;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.ChatFindCommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.ChatHistoryCommandResult;
-import main.java.ru.mail.track.socket_messenger.commands.command_result.CommandResult;
-import main.java.ru.mail.track.socket_messenger.message.Message;
-import main.java.ru.mail.track.socket_messenger.message.MessageStore;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.ChatFindMessage;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.ChatHistoryMessage;
-import main.java.ru.mail.track.socket_messenger.message.message_impl.SendMessage;
-import main.java.ru.mail.track.socket_messenger.session.Session;
+import ru.mail.track.socket_messenger.chat.ChatStore;
+import ru.mail.track.socket_messenger.commands.CommandType;
+import ru.mail.track.socket_messenger.commands.command_result.ChatFindCommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.ChatHistoryCommandResult;
+import ru.mail.track.socket_messenger.commands.command_result.CommandResult;
+import ru.mail.track.socket_messenger.message.Message;
+import ru.mail.track.socket_messenger.message.MessageStore;
+import ru.mail.track.socket_messenger.message.message_impl.ChatFindMessage;
+import ru.mail.track.socket_messenger.message.message_impl.ChatHistoryMessage;
+import ru.mail.track.socket_messenger.message.message_impl.SendMessage;
+import ru.mail.track.socket_messenger.session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
